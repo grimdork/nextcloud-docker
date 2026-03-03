@@ -29,8 +29,20 @@ RESOLVER=acmeweb # Default in my Traefik container
 ```
 
 ## Installation & Setup
-1. Spin up the containers
+### Make sure Traefik is running
+It should be running on the same network as Nextcloud is configured to.
 
+### Copy the source directory
+```bash
+cp -r nextcloud-docker /home/docker
+cd /home/docker/nextcloud-docker
+rm -rf .git .github
+```
+
+### Point DNS
+Make one or more DNS records pointing to your server/VPS (most likely A and AAAA).
+
+### Spin up the containers
 ```bash
 docker compose up -d
 ```
@@ -42,7 +54,6 @@ docker compose up -d
 
 ### Run the `post-setup` script
 Once the admin user is created and you can log in, run the included post-setup script to enable Redis, internal cron, and apply various system fixes:
-
 ```bash
 chmod +x post-setup
 ./post-setup

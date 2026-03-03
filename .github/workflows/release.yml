@@ -1,0 +1,28 @@
+name: Create release package
+
+on:
+  push:
+    tags:
+      - 'v*' # Triggers on any tag starting with 'v'
+
+jobs:
+  build:
+    runs-on: ubuntu-slim
+    permissions:
+      contents: write # Required to create the release
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v4
+
+      - name: Create release archive
+        run: |
+          # Zip the current directory, excluding git and hidden files
+          zip -r nextcloud-docker-${{ github.ref_name }}.zip . -x "*.git*" ".github*" ".env*"
+
+      - name: Create GitHub release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: nextcloud-docker-${{ github.ref_name }}.zip
+          generate_release_notes: true # Automatically list commits/PRs
+          draft: false
+          prerelease: false
